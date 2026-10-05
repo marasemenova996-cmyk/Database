@@ -1,0 +1,6 @@
+docs.csv
+results.jsonl
+scores.csv
+evidence.csv
+*.json
+__pycache__/
