@@ -108,7 +108,10 @@ def run(limit):
     docs = list(csv.DictReader(open("docs.csv", encoding="utf-8")))
     done = set()
     if os.path.exists("results.jsonl"):
-        done = {json.loads(l)["url"] for l in open("results.jsonl", encoding="utf-8")}
+        # неудачные попытки (result = null) не считаются сделанными и будут повторены
+        for l in open("results.jsonl", encoding="utf-8"):
+            r = json.loads(l)
+            if r.get("result"): done.add(r["url"])
     todo = [d for d in docs if d["url"] not in done]
     if limit: todo = todo[:limit]
     with open("results.jsonl", "a", encoding="utf-8") as f:
@@ -119,14 +122,28 @@ def run(limit):
             if i % 10 == 0: print(f"{i}/{len(todo)}")
     export_csv()
 
+def valid_score(v):
+    return isinstance(v, int) and not isinstance(v, bool) and -3 <= v <= 3
+
 def export_csv():
     """Берёт eligible-документы, где упомянута >=1 тема. Пустая ячейка = не упомянуто."""
-    main_rows, ev_rows = [], []
+    # по каждому url берём последнюю успешную запись (после перезапуска могут быть повторы)
+    latest = {}
     for l in open("results.jsonl", encoding="utf-8"):
-        r = json.loads(l); res = r["result"]
+        r = json.loads(l)
+        if r.get("result") or r["url"] not in latest: latest[r["url"]] = r
+    main_rows, ev_rows = [], []
+    for r in latest.values():
+        res = r["result"]
         if not res or not res.get("eligible"): continue
         iss = res["issues"]
-        ment = [bool(iss.get(str(k), {}).get("mentioned")) for k in range(1, 16)]
+        ment = []
+        for k in range(1, 16):
+            it = iss.get(str(k)) or {}
+            ok = bool(it.get("mentioned")) and valid_score(it.get("score"))
+            if it.get("mentioned") and not ok:
+                print(f"  некорректная оценка, тема {k} считается неупомянутой:", r["url"], it.get("score"))
+            ment.append(ok)
         if not any(ment): continue
         scores = [iss[str(k)]["score"] if ment[k-1] else "" for k in range(1, 16)]
         evid = [iss[str(k)].get("evidence", "") if ment[k-1] else "" for k in range(1, 16)]

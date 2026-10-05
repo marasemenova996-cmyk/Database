@@ -5,6 +5,7 @@
 Результат: docs.csv (source, url, date, title, text)
 """
 import csv, re, time, gzip
+from datetime import datetime
 from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
@@ -36,6 +37,21 @@ def mentions_issue(text):
     t = text.lower()
     return any(k in t for k in KEYWORDS)
 
+DATE_FORMATS = ["%B %d, %Y", "%b %d, %Y", "%b. %d, %Y", "%d %B %Y", "%d %b %Y",
+                "%m/%d/%Y", "%Y/%m/%d", "%Y%m%d"]
+
+def norm_date(s):
+    """Приводит дату к YYYY-MM-DD; если не удалось распознать — пустая строка."""
+    s = (s or "").strip()
+    m = re.match(r"(\d{4})-(\d{2})-(\d{2})", s)
+    if m: return m.group(0)
+    s = re.sub(r"\s+", " ", s.replace("Sept.", "Sep."))
+    for fmt in DATE_FORMATS:
+        try: return datetime.strptime(s, fmt).strftime("%Y-%m-%d")
+        except ValueError: pass
+    m = re.search(r"[A-Z][a-z]+\.? \d{1,2}, \d{4}", s)   # дата внутри более длинного текста
+    return norm_date(m.group(0)) if m and m.group(0) != s else ""
+
 def get(url):
     r = requests.get(url, headers=HEADERS, timeout=30, allow_redirects=True)
     r.raise_for_status()
@@ -65,7 +81,7 @@ def sitemap_urls(root):
             queue.append(s.loc.text.strip())
         for u in soup.find_all("url"):
             lm = u.find("lastmod")
-            found.append((u.loc.text.strip(), lm.text.strip()[:10] if lm else ""))
+            found.append((u.loc.text.strip(), norm_date(lm.text) if lm else ""))
     return found
 
 def parse(url):
@@ -77,10 +93,11 @@ def parse(url):
                 ("meta", {"name": "date"}), ("meta", {"name": "DC.date"})]:
         m = soup.find(*sel)
         if m and m.get("content"):
-            date = m["content"][:10]; break
+            date = norm_date(m["content"])
+            if date: break
     if not date:
         t = soup.find("time")
-        if t: date = (t.get("datetime") or t.get_text(strip=True))[:10]
+        if t: date = norm_date(t.get("datetime") or t.get_text(" ", strip=True))
     for tag in soup(["script", "style", "nav", "header", "footer", "aside"]):
         tag.decompose()
     node = soup.find("main") or soup.find("article") or soup.body
