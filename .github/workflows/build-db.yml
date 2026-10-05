@@ -1,0 +1,83 @@
+name: Build database
+
+# Сбор документов (collect_docs.py) и их оценка (score_docs.py) на серверах GitHub.
+# Результаты коммитятся в ту же ветку: docs.csv, results.jsonl, scores.csv, evidence.csv.
+# Для оценки нужен секрет репозитория ANTHROPIC_API_KEY (Settings → Secrets and variables → Actions).
+
+on:
+  push:
+    paths: [collect_docs.py, score_docs.py, .github/workflows/build-db.yml]
+  workflow_dispatch:
+    inputs:
+      step:
+        description: "Что запускать"
+        type: choice
+        options: [all, collect, score]
+        default: all
+      limit:
+        description: "Сколько документов оценить (0 = все)"
+        default: "0"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-db-${{ github.ref }}
+
+jobs:
+  collect:
+    if: github.event_name == 'push' || inputs.step != 'score'
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r requirements.txt
+      - run: timeout 320m python -u collect_docs.py
+        continue-on-error: true   # при таймауте сохраняем то, что успели собрать
+      - name: Commit docs.csv
+        if: always()
+        run: |
+          [ -f docs.csv ] || exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f docs.csv
+          git commit -m "Update docs.csv" || exit 0
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+  score:
+    needs: collect
+    if: always() && needs.collect.result != 'failure' && (github.event_name == 'push' || inputs.step != 'collect')
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: "${{ github.ref_name }}" }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Check prerequisites
+        id: pre
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "::warning::Секрет ANTHROPIC_API_KEY не задан — оценка пропущена."; echo "ok=false" >> "$GITHUB_OUTPUT"
+          elif [ ! -f docs.csv ]; then
+            echo "::warning::docs.csv нет — сначала запустите сбор."; echo "ok=false" >> "$GITHUB_OUTPUT"
+          else echo "ok=true" >> "$GITHUB_OUTPUT"; fi
+      - if: steps.pre.outputs.ok == 'true'
+        run: pip install -r requirements.txt
+      - if: steps.pre.outputs.ok == 'true'
+        run: timeout 320m python -u score_docs.py --limit "${{ inputs.limit || '0' }}"
+      - name: Commit results
+        if: always() && steps.pre.outputs.ok == 'true'
+        run: |
+          [ -f results.jsonl ] && python -c "import score_docs; score_docs.export_csv()" || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f results.jsonl scores.csv evidence.csv
+          git commit -m "Update scoring results" || exit 0
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

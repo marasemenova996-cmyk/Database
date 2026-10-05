@@ -104,6 +104,14 @@ def parse(url):
     text = re.sub(r"\s+", " ", node.get_text(" ", strip=True)) if node else ""
     return title, date, text
 
+def save(rows):
+    rows = sorted(rows, key=lambda r: r[2], reverse=True)[:MAX_TOTAL]
+    with open("docs.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["source", "url", "date", "title", "text"])
+        w.writerows(rows)
+    return len(rows)
+
 def main():
     rows, seen = [], set()
     for src in SOURCES:
@@ -131,13 +139,8 @@ def main():
             got += 1
             if got % 25 == 0: print("  ", got)
         print("  собрано:", got)
-    rows.sort(key=lambda r: r[2], reverse=True)
-    rows = rows[:MAX_TOTAL]
-    with open("docs.csv", "w", newline="", encoding="utf-8") as f:
-        w = csv.writer(f)
-        w.writerow(["source", "url", "date", "title", "text"])
-        w.writerows(rows)
-    print("Готово:", len(rows), "документов -> docs.csv")
+        save(rows)                                  # промежуточное сохранение после каждого сайта
+    print("Готово:", save(rows), "документов -> docs.csv")
 
 if __name__ == "__main__":
     main()
