@@ -58,9 +58,18 @@ def norm_date(s):
     return norm_date(m.group(0)) if m and m.group(0) != s else ""
 
 def get(url):
-    r = requests.get(url, headers=HEADERS, timeout=30, allow_redirects=True)
-    r.raise_for_status()
-    return r
+    # Wayback при перегрузке отвечает отказом соединения или 429/503 — ждём и повторяем
+    tries = 5 if "web.archive.org" in url else 1
+    for attempt in range(tries):
+        try:
+            r = requests.get(url, headers=HEADERS, timeout=30, allow_redirects=True)
+            if r.status_code in (429, 503) and attempt < tries - 1:
+                raise requests.ConnectionError(f"HTTP {r.status_code}")
+            r.raise_for_status()
+            return r
+        except (requests.ConnectionError, requests.Timeout):
+            if attempt == tries - 1: raise
+            time.sleep(30 * 2 ** attempt)
 
 def sitemap_urls(root):
     """Находит sitemap через robots.txt, рекурсивно раскрывает индексы."""
