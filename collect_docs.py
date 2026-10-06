@@ -129,9 +129,11 @@ def parse(url):
     text = re.sub(r"\s+", " ", node.get_text(" ", strip=True)) if node else ""
     return title, date, text
 
+OUT = "docs.csv"
+
 def save(rows):
     rows = sorted(rows, key=lambda r: r[2], reverse=True)[:MAX_TOTAL]
-    with open("docs.csv", "w", newline="", encoding="utf-8") as f:
+    with open(OUT, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["source", "url", "date", "title", "text"])
         w.writerows(rows)
@@ -141,7 +143,16 @@ def main():
     import argparse, os
     ap = argparse.ArgumentParser()
     ap.add_argument("--only", help="собрать только эти источники (через запятую); остальные берутся из docs.csv")
+    ap.add_argument("--quota", action="append", default=[], metavar="ИСТОЧНИК=N", help="изменить квоту источника")
+    ap.add_argument("--out", default="docs.csv", help="куда записать результат")
     a = ap.parse_args()
+    global OUT, MAX_TOTAL
+    OUT = a.out
+    for q in a.quota:
+        name, n = q.rsplit("=", 1)
+        for src in SOURCES:
+            if src["name"] == name: src["quota"] = int(n)
+    MAX_TOTAL = max(MAX_TOTAL, sum(s["quota"] for s in SOURCES))
     only = set(a.only.split(",")) if a.only else None
     rows, seen = [], set()
     if only and os.path.exists("docs.csv"):
@@ -179,7 +190,7 @@ def main():
             if got % 25 == 0: print("  ", got)
         print("  собрано:", got)
         save(rows)                                  # промежуточное сохранение после каждого сайта
-    print("Готово:", save(rows), "документов -> docs.csv")
+    print("Готово:", save(rows), "документов ->", OUT)
 
 if __name__ == "__main__":
     csv.field_size_limit(sys.maxsize)

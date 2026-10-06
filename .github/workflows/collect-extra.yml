@@ -1,0 +1,35 @@
+name: Collect extra
+
+# Дополнительный сбор в отдельный файл (не трогает docs.csv); идёт параллельно с Build database.
+on:
+  workflow_dispatch:
+    inputs:
+      args:
+        description: "Аргументы collect_docs.py"
+        default: "--only WhiteHouse+NSC --quota WhiteHouse+NSC=900 --out docs_extra.csv"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: collect-extra-${{ github.ref }}
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r requirements.txt
+      - run: timeout 320m python -u collect_docs.py ${{ inputs.args }}
+        continue-on-error: true
+      - name: Commit result
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f docs_extra*.csv || exit 0
+          git commit -m "Update extra documents [skip ci]" || exit 0
+          for i in 1 2 3; do git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break; sleep 5; done
