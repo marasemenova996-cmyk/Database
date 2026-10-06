@@ -145,6 +145,9 @@ def main():
     ap.add_argument("--only", help="собрать только эти источники (через запятую); остальные берутся из docs.csv")
     ap.add_argument("--quota", action="append", default=[], metavar="ИСТОЧНИК=N", help="изменить квоту источника")
     ap.add_argument("--out", default="docs.csv", help="куда записать результат")
+    ap.add_argument("--include", action="append", default=[], metavar="ИСТОЧНИК=a,b",
+                    help="заменить список разделов URL источника")
+    ap.add_argument("--exclude-from", help="CSV с колонкой url: эти документы пропустить (уже собраны)")
     a = ap.parse_args()
     global OUT, MAX_TOTAL
     OUT = a.out
@@ -152,6 +155,10 @@ def main():
         name, n = q.rsplit("=", 1)
         for src in SOURCES:
             if src["name"] == name: src["quota"] = int(n)
+    for inc in a.include:
+        name, parts = inc.split("=", 1)
+        for src in SOURCES:
+            if src["name"] == name: src["include"] = parts.split(",")
     MAX_TOTAL = max(MAX_TOTAL, sum(s["quota"] for s in SOURCES))
     only = set(a.only.split(",")) if a.only else None
     rows, seen = [], set()
@@ -160,6 +167,9 @@ def main():
         rows = [r for r in rows if r[0] not in only]
         seen = {r[1] for r in rows}
         print("из docs.csv оставлено:", len(rows))
+    if a.exclude_from:
+        seen |= {r["url"] for r in csv.DictReader(open(a.exclude_from, encoding="utf-8"))}
+        print("исключено как уже собранные:", len(seen))
     for src in SOURCES:
         if only and src["name"] not in only: continue
         print("==", src["name"])
