@@ -14,7 +14,8 @@ TOPIC = re.compile(r"russia|putin|moscow|kremlin|ukrain|zelensk|kyiv|china|chine
     r"sanction|ceasefire|peace deal|peace agreement", re.I)
 start, end = int(sys.argv[1]), int(sys.argv[2])
 full = len(sys.argv) > 3 and sys.argv[3] == "full"
-rows = list(csv.DictReader(open("docs.csv", encoding="utf-8")))
+import os
+rows = list(csv.DictReader(open(os.environ.get("DOCS", "docs.csv"), encoding="utf-8")))
 for i in range(start, min(end, len(rows))):
     r = rows[i]; t = r["text"]
     if full or len(t) < 1500:

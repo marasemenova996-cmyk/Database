@@ -23,7 +23,7 @@ SOURCES = [
      "include": ["/remarks", "/speeches", "/secretary", "/strategy"]},
     # defense.gov / war.gov закрыты для облачных серверов (Akamai 403), поэтому страницы Пентагона
     # берём из копий в Wayback Machine. Транскрипты (в основном брифинги) не берём.
-    {"name": "DoD", "quota": 250,
+    {"name": "DoD", "quota": 250, "min_id": 4000000, "date_from_index": True, "pause": 3,
      "wayback": ["war.gov/News/Speeches/Speech/Article/", "war.gov/News/Releases/Release/Article/",
                  "defense.gov/News/Speeches/Speech/Article/", "defense.gov/News/Releases/Release/Article/"]},
 ]
@@ -87,22 +87,32 @@ def sitemap_urls(root):
             found.append((u.loc.text.strip(), norm_date(lm.text) if lm else ""))
     return found
 
-def wayback_urls(prefixes, since="2025"):
-    """Список страниц из индекса Wayback Machine: (исходный url, дата копии, url копии)."""
+def wayback_urls(prefixes, since="202412", min_id=0):
+    """Список страниц из индекса Wayback Machine: (исходный url, дата, url копии).
+
+    Дата = первая архивная копия (collapse=urlkey оставляет самую раннюю) — для свежих статей
+    это почти дата публикации. min_id отсекает старые статьи (номер в /Article/<id>/ растёт со временем).
+    Копии одной статьи на defense.gov и war.gov склеиваются по номеру статьи."""
     found = {}
     for pre in prefixes:
         q = ("https://web.archive.org/cdx/search/cdx?url=" + pre + "&matchType=prefix&from=" + since +
              "&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&fl=timestamp,original&output=json")
-        try:
-            time.sleep(PAUSE)
-            data = get(q).json()[1:]
-        except Exception as e:
-            print("  cdx fail", pre, e); continue
+        data = []
+        for attempt in range(3):
+            try:
+                time.sleep(PAUSE * (1 + 4 * attempt))
+                data = get(q).json()[1:]
+                break
+            except Exception as e:
+                print("  cdx fail", pre, e)
         for ts, orig in data:
             if "?" in orig: continue
-            key = re.sub(r"^https?://(www\.)?|:80(?=/)", "", orig).rstrip("/").lower()
-            if key not in found or ts > found[key][1]:
-                found[key] = ("https://www." + key, ts, f"https://web.archive.org/web/{ts}id_/{orig}")
+            m = re.search(r"/Article/(\d+)/", orig, re.I)
+            if not m or int(m.group(1)) < min_id: continue
+            key = m.group(1)
+            if key not in found or ts < found[key][1]:
+                url = "https://www." + re.sub(r"^https?://(www\.)?|:80(?=/)", "", orig).rstrip("/")
+                found[key] = (url, ts, f"https://web.archive.org/web/{ts}id_/{orig}")
     return [(u, f"{ts[:4]}-{ts[4:6]}-{ts[6:8]}", fetch) for u, ts, fetch in found.values()]
 
 def parse(url):
@@ -174,7 +184,7 @@ def main():
         if only and src["name"] not in only: continue
         print("==", src["name"])
         if "wayback" in src:
-            urls = wayback_urls(src["wayback"])
+            urls = wayback_urls(src["wayback"], min_id=src.get("min_id", 0))
         else:
             urls = [(u, d, u) for u, d in sitemap_urls(src["root"])
                     if any(p.lower() in u.lower() for p in src["include"])]
@@ -185,7 +195,7 @@ def main():
             if got >= src["quota"]: break
             if u in seen: continue
             try:
-                time.sleep(PAUSE)
+                time.sleep(src.get("pause", PAUSE))     # Wayback ограничивает частоту запросов
                 title, date, text = parse(fetch)
             except Exception as e:
                 print("  skip", u, e); continue
@@ -195,6 +205,7 @@ def main():
             if len(text) < 600: continue          # списки и пустышки; короткие релизы (>600 знаков) оставляем
             if not mentions_issue(text): continue  # нет ни одной темы из списка
             seen.add(u)
+            if src.get("date_from_index"): date = lastmod   # у архивных копий meta-дата ненадёжна
             rows.append([src["name"], u, date or lastmod, title, text])
             got += 1
             if got % 25 == 0: print("  ", got)
