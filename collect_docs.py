@@ -21,13 +21,17 @@ SOURCES = [
      "include": ["/remarks/", "/briefings-statements/", "/nsc/", "/fact-sheets/", "strategy"]},
     # state.gov напрямую отвечает облачным серверам очень медленно (таймауты), поэтому тоже через Wayback.
     {"name": "StateDept", "quota": 350, "pause": 3,
-     "wayback": ["state.gov/releases/office-of-the-spokesman/2026/", "state.gov/releases/office-of-the-spokesman/2025/"],
+     "wayback": ["state.gov/releases/office-of-the-spokesman/2026/", "state.gov/releases/office-of-the-spokesman/2025/",
+                 "state.gov/releases/"],             # плюс релизы бюро и посольских офисов
+     "require": ["/2025/", "/2026/"],
      "exclude": ["press-briefing", "briefing-with", "travel-to", "-schedule", "public-schedule"]},
     # defense.gov / war.gov закрыты для облачных серверов (Akamai 403), поэтому страницы Пентагона
     # берём из копий в Wayback Machine. Транскрипты (в основном брифинги) не берём.
     {"name": "DoD", "quota": 250, "min_id": 4000000, "date_from_index": True, "pause": 3,
      "wayback": ["war.gov/News/Speeches/Speech/Article/", "war.gov/News/Releases/Release/Article/",
-                 "defense.gov/News/Speeches/Speech/Article/", "defense.gov/News/Releases/Release/Article/"]},
+                 "defense.gov/News/Speeches/Speech/Article/", "defense.gov/News/Releases/Release/Article/",
+                 # материалы DoD News (официальная служба новостей министерства)
+                 "war.gov/News/News-Stories/Article/Article/", "defense.gov/News/News-Stories/Article/Article/"]},
 ]
 
 # Грубый префильтр на «упомянут хотя бы один поляризующий вопрос».
@@ -189,7 +193,8 @@ def main():
         seen = {r[1] for r in rows}
         print("из docs.csv оставлено:", len(rows))
     if a.exclude_from:
-        seen |= {r["url"] for r in csv.DictReader(open(a.exclude_from, encoding="utf-8"))}
+        for f in a.exclude_from.split(","):
+            seen |= {r["url"] for r in csv.DictReader(open(f, encoding="utf-8"))}
         print("исключено как уже собранные:", len(seen))
     for src in SOURCES:
         if only and src["name"] not in only: continue
@@ -197,6 +202,8 @@ def main():
         if "wayback" in src:
             urls = wayback_urls(src["wayback"], min_id=src.get("min_id", 0))
             urls = [x for x in urls if not any(e in x[0].lower() for e in src.get("exclude", []))]
+            if src.get("require"):
+                urls = [x for x in urls if any(r in x[0] for r in src["require"])]
         else:
             urls = [(u, d, u) for u, d in sitemap_urls(src["root"])
                     if any(p.lower() in u.lower() for p in src["include"])]
