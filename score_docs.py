@@ -92,9 +92,9 @@ def score_one(client, doc):
             f"ТЕКСТ:\n{doc['text'][:MAX_CHARS]}")
     for attempt in range(5):
         try:
-            r = client.messages.create(model=MODEL, max_tokens=4000, temperature=0,
+            r = client.messages.create(model=MODEL, max_tokens=16000,
                                        system=SYSTEM, messages=[{"role": "user", "content": user}])
-            raw = r.content[0].text.strip().replace("```json", "").replace("```", "").strip()
+            raw = next(b.text for b in r.content if b.type == "text").strip().replace("```json", "").replace("```", "").strip()
             out = json.loads(raw)
             assert "issues" in out
             return out
