@@ -1,0 +1,89 @@
+# Ручная оценка документов Госдепа (номера — строки codes/state.snap.csv).
+# idx | category | institution | directive | eligible | note_13 | issues ("тема=оценка~цитата;;...")
+# Темы: 1 Россия, 2 Укр. кризис, 3 Китай, 4 Климат, 5 Миграция, 6 Глобализация, 7 НАТО, 8 ЕС, 9 ООН,
+# 10 Межд. торговля, 11 Демократии в мире, 12 Военные интервенции, 13 Либеральная повестка, 14 Израиль, 15 Многополярность
+0|заявление|Госдеп (Т. Пиготт)|0|1||5=-1~traffics illegal immigrants
+1|пресс-релиз|Госдеп|0|1||9=-2~it will not provide U.S. Government funding to the World Health Organization through Gavi
+2|заявление|Госдеп|0|1||
+3|пресс-релиз|Госдеп|0|1||
+4|заявление|Госдеп|0|1||9=1~We urge all UN Member States to implement these resolutions
+5|пресс-релиз|Госдеп (Т. Пиготт)|0|1||3=1~The meeting was positive and constructive.
+6|интервью|Госдеп (М. Рубио)|0|1||12=2~We’re going to destroy Iran’s navy, destroy their air force.;;2=1~we want to see the end of that war;;1=1~it is important for nuclear powers to have some engagement at the governmental level
+7|заявление|Госдеп (М. Рубио)|0|1||
+8|заявление|Госдеп (Т. Пиготт)|0|1||
+9|пресс-релиз|Госдеп|0|1||3=-2~hold China-based entities accountable for their support to Iran
+10|интервью|Госдеп (М. Рубио)|0|1||7=1~one of the reasons why I’ve been a strong supporter of our presence in NATO is because it allows us these basing rights;;8=-1~many European countries did not step up and do enough;;2=1~to play whatever constructive role we can to bring about an enduring end to this war in Ukraine;;14=1~for the first time in 30 years, the sovereign Government of Lebanon is speaking to the Government of Israel directly
+11|интервью|Госдеп (М. Рубио)|0|1||2=1~in order to end this war will require something that both Russia and Ukraine can agree to;;3=1~We have to have a relationship with China and we want it to be as positive as it possibly can be.;;7=1~We sell arms via PURL, which is an initiative we have through NATO.
+12|выступление|Госдеп (М. Рубио)|0|1||
+13|пресс-релиз|Госдеп|0|1||
+14|заявление|Госдеп|0|1||
+15|пресс-релиз|Госдеп|0|1||11=2~support the Nicaraguan people’s right to a future free from tyranny
+16|заявление|Госдеп (М. Рубио)|0|1||
+17|заявление|Госдеп|0|1||
+18|заявление|Госдеп (М. Рубио)|0|1||
+19|заявление|Госдеп (Т. Пиготт)|0|1||9=1~The United States calls on all UN Member States to fully implement their binding obligations.;;1=-1~due to the obstruction of Russia and China;;3=-1~due to the obstruction of Russia and China
+20|пресс-релиз|Госдеп|0|1||1=-2~Russia has now delivered to Iran nearly all of its reportedly 24 contracted Yak-130 aircraft.
+21|выступление|Госдеп (М. Рубио)|0|1||6=-2~There was this fantasy, really, that the whole world would become a free enterprise, democracies, and that everyone would look us.;;10=-1~we traded our industrial base for the illusion of cheap abundance
+22|пресс-релиз|Госдеп|0|1||
+23|заявление|Госдеп (Т. Пиготт)|0|1||
+24|заявление|Госдеп|0|1||11=1~a peaceful, democratic, and stable future for the country
+25|интервью|Госдеп (М. Рубио)|0|1||12=2~The United States is defending that shipping and, in addition, is targeting the places that are launching against those ships;;3=1~it’s important for us to continue to talk to China, irrespective of our differences;;1=1~We have to have a relationship with the Russian Government, even though we have areas of disagreement;;2=1~We think it would be good for Russia if that war came to an end.;;5=-1~the threat of mass migration
+26|пресс-релиз|Госдеп|0|1||5=-2~citizenship is not a commodity to be acquired through the calculated exploitation of U.S. immigration laws
+27|пресс-релиз|Госдеп|0|1||
+28|заявление|Госдеп (М. Рубио)|0|1||
+29|заявление|Госдеп (Т. Брюс)|0|1||3=-2~This is another example of how the CCP and China-based companies provide key economic and technical support to Iran and its proxies
+30|заявление|Госдеп (М. Рубио)|0|1||7=2~Luxembourg’s decision to spend more on national defense strengthens our NATO Alliance for future generations.
+31|пресс-релиз|Госдеп (Т. Пиготт)|0|1||
+32|пресс-релиз|Госдеп|0|1||5=-2~illegal and mass immigration
+33|заявление|Госдеп|0|1||11=2~We stand with Paz’s democratic government
+34|заявление|Госдеп (Т. Пиготт)|0|1||3=-1~six entities and individuals in China, India, Russia, and Iran;;1=-1~six entities and individuals in China, India, Russia, and Iran
+35|пресс-релиз|Госдеп|0|1||
+36|заявление|Госдеп (М. Рубио)|0|1||
+37|соглашение|Госдеп|0|1||10=1~Agreement on Reciprocal Trade and Investment
+38|интервью|Госдеп (М. Рубио)|0|1||10=1~We’re hoping to wrap up good, solid trade deals with all three of these countries;;1=-1~the Chinese and Russian companies held these fields but never turned them into anything;;3=-1~the Chinese and Russian companies held these fields but never turned them into anything;;14=1~Obviously, we’re not going to do what the UK did.
+39|интервью|Госдеп (М. Рубио)|0|1||2=1~Ultimately, we all want this war to end;;3=1~The relationship between the United States and China will define the 21st century;;9=-1~the United Nations, for example, has tremendous potential, but it’s not living up to it;;10=-1~the President is a very strong believer in tariffs as a tool of national policy;;14=1~the last thing that Israel needs or the region needs is an additional crisis
+40|пресс-релиз|Госдеп|0|1||10=1~increase trade flows
+41|пресс-релиз|Госдеп|0|1||9=1~our $1.8 billion in assistance to the UN Office for the Coordination of Humanitarian Affairs
+42|заявление|Госдеп (М. Рубио)|0|1||7=2~As NATO Allies, we stand together to ensure a safer, more secure world.
+43|заявление|Госдеп (Т. Пиготт)|0|1||
+44|выступление|Госдеп (М. Рубио)|0|1|климат: критика «климатического культа» и климатической энергополитики|6=-2~a dangerous delusion…that we would now live in a world without borders;;10=-1~we embraced a dogmatic vision of free and unfettered trade;;4=0~To appease a climate cult, we have imposed energy policies on ourselves that are impoverishing our people;;5=-2~an unprecedented wave of mass migration that threatens the cohesion of our societies;;8=1~For the United States and Europe, we belong together.;;9=-1~today, on the most pressing matters before us, it has no answers and has played virtually no role;;1=-1~the Russians are playing for time;;2=1~whether there is an outcome that Ukraine can live with and that Russia will accept;;3=-1~There are some fundamental challenges between our countries and between the West and China
+45|интервью|Госдеп (М. Рубио)|0|1||2=1~the reason why Ukraine’s been able to sustain this war is because the United States has provided and sold weapons to Ukraine;;1=-1~we’ve imposed sanctions on Russia;;9=-1~The United Nations isn’t going to do it.;;3=1~It would be reckless and irresponsible for the United States and China not to have meetings;;5=-1~has experienced mass migration from Cuba in the past
+46|заявление|Госдеп|0|1||11=2~We cannot allow the overthrow of democratically elected leaders in our hemisphere
+47|пресс-релиз|Госдеп|0|1||
+48|заявление|Госдеп (М. Рубио)|0|1||5=-2~The United States will not allow foreigners to exploit our immigration system
+49|пресс-релиз|Госдеп (Т. Пиготт)|0|1||
+50|пресс-релиз|Госдеп|0|1||
+51|выступление|Госдеп (М. Рубио)|0|1||11=2~even when you make progress in democracy and in freedom, they have to be sustained and they have to endure
+52|заявление|Госдеп (Т. Пиготт)|0|1||3=-2~goods tainted by forced labor of Uyghurs and other ethnic minorities in China;;10=-1~leveling the playing field for American companies
+53|заявление|Госдеп (Т. Пиготт)|0|1||
+54|заявление|Госдеп (М. Рубио)|0|1||
+55|заявление|Госдеп|0|1||9=1~in accordance with the relevant United Nations Security Council resolutions
+56|заявление|Госдеп (М. Рубио)|0|1||
+57|заявление|Госдеп|0|1||
+58|заявление|Госдеп (М. Рубио)|0|1||
+59|заявление|Госдеп (М. Рубио)|0|1||1=1~We thank Russia for working with Special Envoy Steve Witkoff to release Mr. Gilman
+60|пресс-релиз|Госдеп|0|1||11=1~the world’s oldest and largest democracies remain the primary architects of the AI revolution;;10=1~lowering barriers for startups and builders
+61|пресс-релиз|Госдеп|0|1||10=1~the prompt resolution of market access barriers
+62|заявление|Госдеп (Т. Пиготт)|0|1||3=-2~a China-based petroleum terminal operator that has imported tens of millions of barrels of sanctioned Iranian crude oil
+63|пресс-релиз|Госдеп|0|1||
+64|пресс-релиз|Госдеп|0|0||
+65|заявление|Госдеп (М. Рубио)|0|1||5=-2~combat the scourge of transnational crime and unchecked illegal immigration
+66|заявление|Госдеп (Т. Пиготт)|0|1||
+67|пресс-релиз|Госдеп|0|1||
+68|заявление|Госдеп (М. Рубио)|0|1||
+69|пресс-релиз|Госдеп|0|1||11=1~promote democracy in Cuba
+70|заявление|Госдеп|0|1||3=-2~there is no legal basis for China’s expansive maritime claims in the South China Sea
+71|заявление|Госдеп (М. Рубио)|0|1||5=-1~disrupt illegal immigration
+72|заявление|Госдеп (Т. Пиготт)|0|1||
+73|заявление|Госдеп (М. Рубио)|0|1||11=1~promote democracy in Cuba
+74|заявление|Госдеп (Т. Пиготт)|0|1||
+75|заявление|Госдеп (М. Рубио)|0|1||
+76|заявление|Госдеп (М. Рубио)|0|1||14=2~The United States reaffirms its unwavering support for Israel’s right to exist, to defend itself, and to ensure the safety of its people.
+77|заявление|Госдеп|0|1||11=1~a shared interest in global peace, freedom, democracy, and economic prosperity
+78|заявление|Госдеп (М. Рубио, Р. Кеннеди)|0|1|либеральная повестка: -2 (аборты, Женевская консенсусная декларация)|13=-2~to protect life at all stages;;9=1~to work together across the UN system to realize these values
+79|пресс-релиз|Госдеп|0|1||
+80|выступление|Госдеп (М. Рубио)|0|1||
+81|интервью|Госдеп (М. Рубио)|0|1||10=1~not only at the security level but as well trade and economically speaking
+82|выступление|Госдеп (М. Рубио)|0|1||
+83|выступление|Госдеп (М. Рубио)|0|1||10=1~And we want to see more trade activity between Peru and the U.S.
+84|пресс-релиз|Госдеп|0|1||
