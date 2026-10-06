@@ -19,8 +19,10 @@ MAX_TOTAL = 1000
 SOURCES = [
     {"name": "WhiteHouse+NSC", "root": "https://www.whitehouse.gov", "quota": 400,
      "include": ["/remarks/", "/briefings-statements/", "/nsc/", "/fact-sheets/", "strategy"]},
-    {"name": "StateDept", "root": "https://www.state.gov", "quota": 350,
-     "include": ["/remarks", "/speeches", "/secretary", "/strategy"]},
+    # state.gov напрямую отвечает облачным серверам очень медленно (таймауты), поэтому тоже через Wayback.
+    {"name": "StateDept", "quota": 350, "pause": 3,
+     "wayback": ["state.gov/releases/office-of-the-spokesman/2026/", "state.gov/releases/office-of-the-spokesman/2025/"],
+     "exclude": ["press-briefing", "briefing-with", "travel-to", "-schedule", "public-schedule"]},
     # defense.gov / war.gov закрыты для облачных серверов (Akamai 403), поэтому страницы Пентагона
     # берём из копий в Wayback Machine. Транскрипты (в основном брифинги) не берём.
     {"name": "DoD", "quota": 250, "min_id": 4000000, "date_from_index": True, "pause": 3,
@@ -108,8 +110,8 @@ def wayback_urls(prefixes, since="202412", min_id=0):
         for ts, orig in data:
             if "?" in orig: continue
             m = re.search(r"/Article/(\d+)/", orig, re.I)
-            if not m or int(m.group(1)) < min_id: continue
-            key = m.group(1)
+            if min_id and (not m or int(m.group(1)) < min_id): continue
+            key = m.group(1) if m else re.sub(r"^https?://(www\.)?|:80(?=/)", "", orig).rstrip("/").lower()
             if key not in found or ts < found[key][1]:
                 url = "https://www." + re.sub(r"^https?://(www\.)?|:80(?=/)", "", orig).rstrip("/")
                 found[key] = (url, ts, f"https://web.archive.org/web/{ts}id_/{orig}")
@@ -185,6 +187,7 @@ def main():
         print("==", src["name"])
         if "wayback" in src:
             urls = wayback_urls(src["wayback"], min_id=src.get("min_id", 0))
+            urls = [x for x in urls if not any(e in x[0].lower() for e in src.get("exclude", []))]
         else:
             urls = [(u, d, u) for u, d in sitemap_urls(src["root"])
                     if any(p.lower() in u.lower() for p in src["include"])]
