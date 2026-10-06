@@ -17,6 +17,9 @@ on:
       limit:
         description: "Сколько документов оценить (0 = все)"
         default: "0"
+      only:
+        description: "Собрать только эти источники через запятую (например StateDept,DoD); пусто = все"
+        default: ""
 
 permissions:
   contents: write
@@ -34,7 +37,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
       - run: pip install -r requirements.txt
-      - run: timeout 320m python -u collect_docs.py
+      - run: timeout 320m python -u collect_docs.py ${{ inputs.only && format('--only {0}', inputs.only) || '' }}
         continue-on-error: true   # при таймауте сохраняем то, что успели собрать
       - name: Commit docs.csv
         if: always()

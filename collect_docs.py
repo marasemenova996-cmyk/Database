@@ -4,7 +4,7 @@
          python collect_docs.py
 Результат: docs.csv (source, url, date, title, text)
 """
-import csv, re, time, gzip
+import csv, re, sys, time, gzip
 from datetime import datetime
 from urllib.parse import urljoin
 import requests
@@ -21,8 +21,11 @@ SOURCES = [
      "include": ["/remarks/", "/briefings-statements/", "/nsc/", "/fact-sheets/", "strategy"]},
     {"name": "StateDept", "root": "https://www.state.gov", "quota": 350,
      "include": ["/remarks", "/speeches", "/secretary", "/strategy"]},
-    {"name": "DoD", "root": "https://www.defense.gov", "quota": 250,
-     "include": ["/News/Speeches/", "/News/Transcripts/", "/News/Releases/", "/Spotlights/", "strategy"]},
+    # defense.gov / war.gov закрыты для облачных серверов (Akamai 403), поэтому страницы Пентагона
+    # берём из копий в Wayback Machine. Транскрипты (в основном брифинги) не берём.
+    {"name": "DoD", "quota": 250,
+     "wayback": ["war.gov/News/Speeches/Speech/Article/", "war.gov/News/Releases/Release/Article/",
+                 "defense.gov/News/Speeches/Speech/Article/", "defense.gov/News/Releases/Release/Article/"]},
 ]
 
 # Грубый префильтр на «упомянут хотя бы один поляризующий вопрос».
@@ -84,6 +87,24 @@ def sitemap_urls(root):
             found.append((u.loc.text.strip(), norm_date(lm.text) if lm else ""))
     return found
 
+def wayback_urls(prefixes, since="2025"):
+    """Список страниц из индекса Wayback Machine: (исходный url, дата копии, url копии)."""
+    found = {}
+    for pre in prefixes:
+        q = ("https://web.archive.org/cdx/search/cdx?url=" + pre + "&matchType=prefix&from=" + since +
+             "&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&fl=timestamp,original&output=json")
+        try:
+            time.sleep(PAUSE)
+            data = get(q).json()[1:]
+        except Exception as e:
+            print("  cdx fail", pre, e); continue
+        for ts, orig in data:
+            if "?" in orig: continue
+            key = re.sub(r"^https?://(www\.)?|:80(?=/)", "", orig).rstrip("/").lower()
+            if key not in found or ts > found[key][1]:
+                found[key] = ("https://www." + key, ts, f"https://web.archive.org/web/{ts}id_/{orig}")
+    return [(u, f"{ts[:4]}-{ts[4:6]}-{ts[6:8]}", fetch) for u, ts, fetch in found.values()]
+
 def parse(url):
     soup = BeautifulSoup(get(url).text, "lxml")
     title = (soup.find("h1") or soup.find("title"))
@@ -98,9 +119,13 @@ def parse(url):
     if not date:
         t = soup.find("time")
         if t: date = norm_date(t.get("datetime") or t.get_text(" ", strip=True))
-    for tag in soup(["script", "style", "nav", "header", "footer", "aside"]):
-        tag.decompose()
-    node = soup.find("main") or soup.find("article") or soup.body
+    # Сначала находим сам текст статьи, потом чистим его. Нельзя удалять <header> во всём документе:
+    # на state.gov из-за незакрытого тега статья оказывается внутри <header>.
+    node = (soup.select_one("article .entry-content") or soup.select_one("div.body") or
+            soup.find("article") or soup.find("main") or soup.body)
+    if node:
+        for tag in node(["script", "style", "nav", "header", "footer", "aside", "form"]):
+            tag.decompose()
     text = re.sub(r"\s+", " ", node.get_text(" ", strip=True)) if node else ""
     return title, date, text
 
@@ -113,20 +138,34 @@ def save(rows):
     return len(rows)
 
 def main():
+    import argparse, os
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--only", help="собрать только эти источники (через запятую); остальные берутся из docs.csv")
+    a = ap.parse_args()
+    only = set(a.only.split(",")) if a.only else None
     rows, seen = [], set()
+    if only and os.path.exists("docs.csv"):
+        rows = [r for r in csv.reader(open("docs.csv", encoding="utf-8"))][1:]
+        rows = [r for r in rows if r[0] not in only]
+        seen = {r[1] for r in rows}
+        print("из docs.csv оставлено:", len(rows))
     for src in SOURCES:
+        if only and src["name"] not in only: continue
         print("==", src["name"])
-        urls = [(u, d) for u, d in sitemap_urls(src["root"])
-                if any(p.lower() in u.lower() for p in src["include"])]
+        if "wayback" in src:
+            urls = wayback_urls(src["wayback"])
+        else:
+            urls = [(u, d, u) for u, d in sitemap_urls(src["root"])
+                    if any(p.lower() in u.lower() for p in src["include"])]
         urls.sort(key=lambda x: x[1], reverse=True)   # свежие первыми
         print("  кандидатов:", len(urls))
         got = 0
-        for u, lastmod in urls:
+        for u, lastmod, fetch in urls:
             if got >= src["quota"]: break
             if u in seen: continue
             try:
                 time.sleep(PAUSE)
-                title, date, text = parse(u)
+                title, date, text = parse(fetch)
             except Exception as e:
                 print("  skip", u, e); continue
             slug = u.rstrip("/").split("/")[-1].lower()
@@ -143,4 +182,5 @@ def main():
     print("Готово:", save(rows), "документов -> docs.csv")
 
 if __name__ == "__main__":
+    csv.field_size_limit(sys.maxsize)
     main()
