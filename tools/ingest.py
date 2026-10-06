@@ -3,7 +3,7 @@
 Номера документов в codes/X.tsv относятся к снимку codes/X.snap.csv (idx, url, date, title),
 поэтому пересборка docs.csv не сбивает уже сделанные оценки.
 
-Формат строки (через TAB):
+Формат строки (поля через «|»):
   idx  category  institution  directive(0/1)  eligible(0/1)  note_13  issues
 issues: "1=-2~цитата;;3=-3~цитата" (номер темы = оценка ~ дословная цитата); пусто — ничего не упомянуто.
 """
@@ -16,7 +16,7 @@ for path in sorted(glob.glob("codes/*.tsv")):
     for n, line in enumerate(open(path, encoding="utf-8"), 1):
         line = line.rstrip("\n")
         if not line.strip() or line.startswith("#"): continue
-        parts = line.split("\t")
+        parts = [p.strip() for p in line.split("|", 6)]
         parts += [""] * (7 - len(parts))
         idx, cat, inst, dire, elig, note, iss = parts[:7]
         issues = {str(k): {"mentioned": False, "score": None, "evidence": ""} for k in range(1, 16)}

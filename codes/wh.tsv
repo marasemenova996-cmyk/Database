@@ -1,0 +1,84 @@
+# Ручная оценка документов Белого дома (номера — строки codes/wh.snap.csv).
+# idx | category | institution | directive | eligible | note_13 | issues ("тема=оценка~цитата;;...")
+# Темы: 1 Россия, 2 Укр. кризис, 3 Китай, 4 Климат, 5 Миграция, 6 Глобализация, 7 НАТО, 8 ЕС, 9 ООН,
+# 10 Межд. торговля, 11 Демократии в мире, 12 Военные интервенции, 13 Либеральная повестка, 14 Израиль, 15 Многополярность
+0|позиция правительства|Белый дом|0|1||
+1|другое|Белый дом|0|0||
+2|пресс-релиз|Офис Первой леди США (Мелания Трамп)|0|0||
+3|позиция правительства|Белый дом (Д. Трамп)|0|1||3=1~The two countries agreed to build a constructive relationship of strategic stability on the basis of respect, fairness, and reciprocity.;;10=1~the two countries reached consensus on recommendations for more favorable tariff treatment for $30 billion of non-sensitive goods in each direction.
+4|пресс-релиз|Офис Первой леди США (Мелания Трамп)|0|0||
+5|пресс-релиз|Белый дом|0|1||5=-2~Thanks to President Trump’s successful border policies, the illegal alien invasion is over and there are fewer people crossing our border than ever before.
+6|пресс-релиз|Офис Первой леди США (Мелания Трамп)|0|0||
+7|пресс-релиз|Офис Первой леди США (Мелания Трамп)|0|0||
+8|другое|Правительство США (соглашение с Данией и Гренландией)|1|1||7=2~the Defense Arrangements have promoted stability and well-being in the North Atlantic Treaty area by uniting the Parties’ efforts for collective defense
+9|пресс-релиз|Офис Первой леди США (Мелания Трамп)|0|0||
+10|пресс-релиз|Офис Первой леди США (Мелания Трамп)|0|0||
+11|позиция правительства|Белый дом (Д. Трамп)|0|1||
+12|позиция правительства|Белый дом (Д. Трамп)|0|1||5=-2~Immediately upon taking office, President Trump secured the border and ended the Biden Administration’s record-shattering illegal immigration into the U.S.
+13|позиция правительства|Белый дом (Д. Трамп)|0|1||
+14|позиция правительства|Белый дом (Д. Трамп)|0|1||
+15|позиция правительства|Белый дом (Д. Трамп)|0|1||10=-1~President Trump is continuing to deliver on his promise to keep American workers, farmers, and businesses first by ending other countries’ unfair and unreasonable trade practices against the United States.
+16|позиция правительства|Белый дом (Д. Трамп)|0|1||10=-1~President Trump is taking decisive and appropriate action to respond to Canada’s additional retaliation and continued discriminatory treatment of crucial American exports.
+17|пресс-релиз|Офис Первой леди США (Мелания Трамп)|0|0||
+18|позиция правительства|Белый дом (Д. Трамп)|0|1|климат: изменение климата угрозой не считается, критикуется климатическая политика|4=0~Years of pursuing radical climate activists’ misguided policies and driving up inflation left farmers with historically high input costs;;10=1~President Trump’s bold America First Trade Agenda has dramatically increased global market access, strengthened farmer and rancher incomes
+19|позиция правительства|Белый дом (Д. Трамп)|0|1|климат: изменение климата угрозой не считается, критикуется климатическая политика|4=0~Record-low beef herd size from the Biden Administration’s war on cattle that pursued radical climate activists’ misguided policies
+20|позиция правительства|Президент США (Д. Трамп)|0|1||
+21|позиция правительства|Белый дом (Д. Трамп)|0|1||11=2~a key step in the Trump Administration’s three-part plan of stabilization, reconstruction and democratic transition.;;12=2~a key precondition to driving continued reform and democratic transition following the incredible success of Operation Absolute Resolve
+22|позиция правительства|Белый дом (Д. Трамп)|0|1||
+23|позиция правительства|Белый дом (Д. Трамп)|0|1|климат: изменение климата угрозой не считается, критикуется климатическая политика|4=0~Years of pursuing radical climate activists’ misguided policies and inciting inflation that left farmers with historically high input costs
+24|позиция правительства|Белый дом (Д. Трамп)|0|1||6=-1~decades of short-sighted, globalist trade policies that hollowed out our domestic steel and aluminum industries;;10=-1~President Trump revolutionized international trade by using Section 232 to address decades of short-sighted, globalist trade policies
+25|позиция правительства|Президент США (Д. Трамп)|0|1||12=2~I have also directed military forces to conduct strikes on dozens of narcotrafficking boats to disrupt the flow of maritime supply routes.
+26|позиция правительства|Президент США (Д. Трамп)|0|1||
+27|пресс-релиз|Офис Первой леди США (Мелания Трамп)|0|0||
+28|позиция правительства|Президент США (Д. Трамп)|0|1||
+29|позиция правительства|Белый дом (Д. Трамп)|0|1||6=-1~decades of short-sighted, globalist trade policies that hollowed out our domestic steel and aluminum industries, impairing our national security.;;10=-1~The Proclamation imposes a 100% ad valorem tariff on drones of a certain size or with certain capabilities that are particularly sensitive for national security purposes
+30|позиция правительства|Белый дом (Д. Трамп)|0|1||
+31|позиция правительства|Белый дом (Д. Трамп)|0|1||5=-2~taking immediate action to end the Biden Administration’s record-shattering illegal immigration into the U.S.
+32|позиция правительства|Белый дом (Д. Трамп)|0|1||6=-1~decades of short-sighted, globalist trade policies that hollowed out our domestic steel and aluminum industries, impairing our national security.;;10=-1~Today, President Donald J. Trump signed a Proclamation to protect America’s polysilicon industry and supply chain from imports that threaten national security.
+33|позиция правительства|Президент США (Д. Трамп)|0|1||5=-2~Every day, they are bravely turning back the illegal invasion at sea
+34|пресс-релиз|Офис Первой леди США (Мелания Трамп)|0|0||
+35|позиция правительства|Президент США (Д. Трамп)|0|1||
+36|позиция правительства|Президент США (Д. Трамп)|0|1||
+37|другое|Правительство США (соглашение с Иорданией о взаимной торговле)|1|1||10=1~INTENDING to enhance reciprocity in their bilateral trade relationship by securing preferential trade arrangements and addressing tariff and non-tariff barriers
+38|позиция правительства|Белый дом (Д. Трамп)|0|1||10=1~Today’s announcement shows that America can defend its domestic production while obtaining and maintaining expansive market access with our trading partners.
+39|позиция правительства|Белый дом (Д. Трамп)|0|1||
+40|позиция правительства|Белый дом (Д. Трамп)|0|1||6=-1~decades of short-sighted, globalist trade policies that had allowed our domestic steel and aluminum industries to weaken, impairing our national security.;;10=-1~President Trump has utilized tariffs on imported aluminum to protect the national security of the United States and its defense and defense-adjacent industrial base.
+41|позиция правительства|Белый дом (Д. Трамп)|0|1||3=-1~only two countries have chosen to retaliate against President Trump’s tariffs rather than negotiate a deal with the United States: the People’s Republic of China and Canada.;;10=-1~President Trump is delivering on his promise to secure better outcomes for American workers, farmers, and businesses by using tariffs to restore reciprocity to trade
+42|позиция правительства|Президент США (Д. Трамп)|0|1||5=1~An immigrant who proudly became a citizen of the United States, Saint Frances Xavier Cabrini cherished America as her beloved home
+43|пресс-релиз|Белый дом|0|1||3=-1~President Trump imposed targeted fentanyl tariffs on China — later expanded to Canada and Mexico — forcing Beijing to tighten controls on 13 key precursor chemicals.;;12=2~U.S. military forces have conducted strikes on dozens of narcotrafficking vessels in the Pacific and Caribbean, severely degrading maritime supply routes.
+44|позиция правительства|Белый дом (Д. Трамп)|0|1||7=2~President Trump is transforming NATO from a model of dependency to one of true partnership, restoring the focus and determination of the founding Alliance.
+45|позиция правительства|Белый дом (Д. Трамп)|0|1||6=-1~decades of short-sighted, globalist trade policies that had allowed our domestic steel and aluminum industries to weaken, impairing our national security.;;10=-1~decades of foreign government market interventions have unfairly eroded our producers’ global market share.
+46|позиция правительства|Белый дом (Д. Трамп)|0|1||10=1~President Trump’s bold America First Trade Agenda has dramatically increased global market access, strengthened farmer incomes, supported rural jobs
+47|позиция правительства|Белый дом (Д. Трамп)|0|1||
+48|позиция правительства|Президент США (Д. Трамп)|0|1||5=-2~We are also keeping our neighborhoods safe by securing our borders, removing deadly drugs and criminal illegal aliens from our streets
+49|позиция правительства|Белый дом (Д. Трамп)|0|1||
+50|речь|Офис Первой леди США (Мелания Трамп)|0|0||
+51|позиция правительства|Президент США (Д. Трамп)|0|1||
+52|позиция правительства|Белый дом (Д. Трамп)|0|1||10=-1~President Trump suspended the de minimis loophole — long exploited by foreign shippers to flood American markets with cheap, duty-free goods
+53|позиция правительства|Белый дом (Д. Трамп)|0|1||6=-1~decades of short-sighted, globalist trade policies that had allowed domestic steel and aluminum industries to weaken, impairing our national security.;;10=-1~the financial position of American families, communities, and businesses from the threat of low-priced foreign imports.
+54|позиция правительства|Президент США (Д. Трамп)|0|1||5=-2~Under the previous administration, 4 years of radical open-border policies resulted in hundreds of thousands migrant children lost or placed with unvetted sponsors.
+55|позиция правительства|Белый дом (Д. Трамп)|0|1||
+56|речь|Офис Первой леди США (Мелания Трамп)|0|0||
+57|речь|Офис Первой леди США (Мелания Трамп)|0|0||
+58|позиция правительства|Белый дом (Д. Трамп)|0|1||5=-2~Extending mortgages, credit cards, and auto loans to illegal aliens who face potential removal or loss of wages creates structural credit risks
+59|позиция правительства|Президент США (Д. Трамп)|0|1||6=-1~Weak leaders accepted the flight of American production overseas as the price of doing business with the world;;10=-1~For decades, gutless politicians handed away our prosperity in the name of free trade—undercutting our workers, hollowing out our factories
+60|позиция правительства|Белый дом (Д. Трамп)|0|1||
+61|позиция правительства|Белый дом (Д. Трамп)|0|1||3=1~President Trump and President Xi agreed that the United States and China should build a constructive relationship of strategic stability on the basis of fairness and reciprocity.;;10=1~China will purchase at least $17 billion per year of U.S. agricultural products in 2026 (prorated), 2027, and 2028
+62|позиция правительства|Президент США (Д. Трамп)|0|1||5=-2~We have stopped the flow of dangerous illegal immigrants and deadly drugs like fentanyl and secured the strongest border in American history
+63|авторская статья|Офис Первой леди США (Мелания Трамп)|0|0||
+64|другое|Белый дом (ONDCP)|0|1||
+65|стратегический документ|Белый дом (ONDCP, Сара Картер)|1|1|-2 (наркотики): цель — «жизнь без наркотиков» как норма|12=2~President Trump stemmed the flow of drugs into our country by taking back our borders and executing kinetic strikes against narcoterrorists.;;13=-2~a road map for the United States to defeat the scourge of illicit drugs and achieve a safe and healthy America, where a drug-free life is the prevailing norm.
+66|позиция правительства|Президент США (Д. Трамп)|0|1||10=1~we are forging powerful trade deals with our Asian and Pacific partners, which are expanding our access to key markets
+67|позиция правительства|Белый дом (Д. Трамп)|0|1||5=-1~Cuba’s corrupt regime continues to drive migration towards the United States;;11=1~The regime persecutes and tortures political opponents, denies its citizens free speech rights;;12=2~In Operation Midnight Hammer, President Trump decisively eliminated Iran’s nuclear weapons capability via targeted military strikes
+68|позиция правительства|Президент США (Д. Трамп)|0|1||
+69|пресс-релиз|Офис Первой леди США (Мелания Трамп)|0|0||
+70|позиция правительства|Президент США (Д. Трамп)|0|1||5=-1~we celebrate the value of apprenticeships and the hardworking Americans—not illegal immigrants—who are building the future of this country;;10=-1~To shield American manufacturing from unfair foreign competition and bring jobs back to our shores, we are imposing robust tariffs
+71|позиция правительства|Белый дом (Д. Трамп)|0|1||
+72|речь|Офис Первой леди США (Мелания Трамп)|0|0||
+73|позиция правительства|Президент США (Д. Трамп)|0|1||5=-2~I immediately took action to secure the border and end the invasion of criminal illegal aliens into our country.
+74|пресс-релиз|Белый дом (ONDCP)|0|1||
+75|позиция правительства|Белый дом|0|1||7=2~enhancing Hungary’s ability to deter aggression while supporting American manufacturing jobs and strengthening NATO’s collective defense posture along the Eastern Flank.
+76|позиция правительства|Президент США (Д. Трамп)|0|1||5=-2~the previous administration empowered a violent wave of criminal illegal aliens to invade our Nation through a wide-open southern border.
+77|позиция правительства|Президент США (Д. Трамп)|0|1||5=-1~my Administration has located more than 60,000 migrant children, most of whom were lost on Joe Biden’s watch
+78|пресс-релиз|Белый дом (ONDCP)|0|1||
+79|позиция правительства|Белый дом (Д. Трамп)|0|1||
