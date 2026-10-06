@@ -59,31 +59,32 @@ summ = wb.active
 summ.title = "Сводка"
 ws = wb.create_sheet("Таблица")
 
-# Легенда над таблицей: шкала, критерии по темам, прочие колонки
+# Таблица с первой строки, легенда (шкала и критерии) — сбоку справа от таблицы
+start = 1
+head = write_table(ws, scores, start, lambda h: [45, 12, 16, 22, 16, 11, 26, 12] + [12] * 15 + [40],
+                   numeric=set(range(7, 23)) | {2})
+ws.freeze_panes = "B2"
 legend = [("Как читать таблицу", None),
-          ("Шкала оценок", "от −3 до +3: −3 резко негативно, −2 негативно, −1 скорее негативно, 0 нейтрально/упомянуто без оценки, "
-                           "+1 скорее позитивно, +2 позитивно, +3 резко позитивно. Пустая клетка — тема в документе не затронута."),
-          ("Основание", "к каждой оценке есть дословная цитата из документа — лист «Цитаты» (строки совпадают по ссылке)."),
+          ("Шкала оценок", "−3 резко негативно\n−2 негативно\n−1 скорее негативно\n0 нейтрально / упомянуто без оценки\n"
+                           "+1 скорее позитивно\n+2 позитивно\n+3 резко позитивно\nпустая клетка — тема не затронута"),
+          ("Основание", "к каждой оценке есть дословная цитата из документа — лист «Цитаты»."),
           ("Директивность", "1 — указ, прокламация, меморандум, директива, соглашение, стратегия; 0 — заявления, речи, релизы."),
           ("Отбор", "в таблицу входят только документы, где оценена хотя бы одна тема."),
           ("Критерии по темам", None)] + TOPIC_RULES
-r = 1
-for name, text in legend:
-    a = ws.cell(r, 1, name); a.font = H if text is None or r == 1 else F
+lc = len(head) + 2                       # одна пустая колонка между таблицей и легендой
+ws.column_dimensions[get_column_letter(lc)].width = 24
+ws.column_dimensions[get_column_letter(lc + 1)].width = 60
+for r, (name, text) in enumerate(legend, 1):
+    a = ws.cell(r, lc, name)
     if text is None:
         a.font = Font(name="Arial", size=12 if r == 1 else 10, bold=True)
-    else:
-        a.font = H
-        b = ws.cell(r, 2, text); b.font = F; b.alignment = WRAP
-        ws.merge_cells(start_row=r, start_column=2, end_row=r, end_column=12)
-        ws.row_dimensions[r].height = 28 if len(text) > 110 else 15
-        for cc in range(1, 13): ws.cell(r, cc).fill = LF
-    r += 1
-start = r + 1
-head = write_table(ws, scores, start, lambda h: [45, 12, 16, 22, 16, 11, 26, 12] + [12] * 15 + [40],
-                   numeric=set(range(7, 23)) | {2})
-ws.freeze_panes = ws.cell(start + 1, 2)
-
+        if r > 1: a.fill = HF; ws.cell(r, lc + 1).fill = HF
+        a.alignment = WRAP
+        continue
+    a.font, a.fill, a.alignment = H, LF, WRAP
+    b = ws.cell(r, lc + 1, text); b.font, b.fill, b.alignment = F, LF, WRAP
+    lines = sum(1 + len(part) // 70 for part in text.split("\n"))
+    ws.row_dimensions[r].height = max(30, 13 * lines)
 ev = wb.create_sheet("Цитаты")
 write_table(ev, evidence, 1, lambda h: [45] + [40] * (len(h) - 1))
 ev.freeze_panes = "B2"
@@ -91,7 +92,7 @@ ev.freeze_panes = "B2"
 first, last = start + 1, start + len(scores)
 rng = lambda L: f"Таблица!${L}${first}:${L}${last}"
 summ["A1"] = "База позиций США по внешнеполитическим темам"; summ["A1"].font = Font(name="Arial", size=14, bold=True)
-summ["A2"] = "Шкала оценок: от −3 (резко негативно) до +3 (резко позитивно); пустая клетка — тема не затронута. Критерии — над таблицей на листе «Таблица», цитаты — на листе «Цитаты»."
+summ["A2"] = "Шкала оценок: от −3 (резко негативно) до +3 (резко позитивно); пустая клетка — тема не затронута. Шкала и критерии — справа от таблицы на листе «Таблица», цитаты — на листе «Цитаты»."
 summ["A4"] = "Сайт"; summ["B4"] = "Документов в таблице"
 sites = [("Белый дом", ["*whitehouse.gov*"]), ("Госдеп", ["*state.gov*"]), ("Минобороны", ["*war.gov*", "*defense.gov*"])]
 for i, (name, pats) in enumerate(sites, 5):
